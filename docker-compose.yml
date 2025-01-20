@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  image-colorization:
+    build: .
+    container_name: image-colorization-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=development
