@@ -172,3 +172,4 @@ cython_debug/
 data/
 .dvc/cache
 /data
+/data.bak
