@@ -82,6 +82,7 @@ We implemented simple REST API configured in the docker environment. The `code` 
 | --- | --- |
 | Problem colorization | 1 |
 | pre-trained model on the different problem (transfer-learning) | 1 |
+|additional model | 1 |
 | Evaluation on a set with at least 10000 photos | 1 |
 | partialy our own dataset | 1 |
 | Hyperparameter tuning or estimation | 1 |
@@ -90,5 +91,5 @@ We implemented simple REST API configured in the docker environment. The `code` 
 | REST API | 1 |
 | DVC | 2 |
 | --- | --- |
-| sum: | 10 |
+| sum: | 11 |
 
