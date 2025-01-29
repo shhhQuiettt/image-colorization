@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Image colorization</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="image-colorization">Image colorization</h1>
+<h3 id="github-repository">Github repository</h3>
+<p><a href="https://github.com/shhhQuiettt/image-colorization">Link to repository</a></p>
+<h2 id="problem-description">Problem description</h2>
+<p>The image colorization problem is a challenging and fascinating task in computer vision, where the goal is to transform a grayscale image into a fully colored one. This task is particularly challenging because it is an ill-posed problem, as there are many possible colorizations for a single grayscale image.</p>
+<h2 id="used-architecture">Used architecture</h2>
+<p>The architecture used in this project is a version of the U-Net architecture. The U-Net architecture is a convolutional neural network that consists of a contracting path, which captures context, and an expansive path, which enables precise localization. The architecture also has skip connections, which allow the network to use features from the contracting path in the expansive path. The U-Net architecture has been widely used in image segmentation tasks and has been shown to be effective in many applications.</p>
+<p>In our porject we used U-Net architecture imported from segmentation_models_pytorch library. As an encoder we took ResNet18 trained on ImageNet dataset.</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\model.png" width="500" height="500" style="margin-left: 110px; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\model_desc.png" width="500" height="500" style="margin-left: auto; margin-right: auto;">
+<h2 id="dataset">Dataset</h2>
+<p><a href="https://www.kaggle.com/datasets/alessiocorrado99/animals10">Dataset</a></p>
+<p>The dataset contains about 28K medium quality animal images belonging to 10 categories: dog, cat, horse, spyder, butterfly, chicken, sheep, cow, squirrel, elephant.</p>
+<p>In a data preprocessing we croped images to size 224x224 and to increase diversity as an augumentation process we applied Random horizontal fip and random rotation up to 15 degree. Both operations were apply under 0.3 probabillity.</p>
+<h2 id="training-and-results">Training and Results</h2>
+<p>We grouped our data set into batches and in each batch there are 128 images with size 224x224.</p>
+<p>The training consisted of three parts:</p>
+<ol>
+<li>Training only decoder with moderate learning rate</li>
+<li>Training only decoder with small learning rate</li>
+<li>Training the whole network</li>
+</ol>
+<p>The <strong>early stopping</strong> was implemented, and the model with the best validation loss is taken to the next stage</p>
+<p>In the first part of the training we used our model with the following parameters: learing rate: <strong>0.01</strong>, loss function: <strong>MAE</strong>, optimizer: <strong>Adam</strong> and patience for early stopping: <strong>6</strong></p>
+<p>The following graph shows loss function for validation and training set:</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\loss_1.png" width="500" height="500" style="display: block; margin-left: auto; margin-right: auto;">
+<p>Validation loss decreases steadly. Nice!</p>
+<p>The results from the model after first part of the training presents as follows:</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_1_1.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_1_2.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_1_3.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<p>In the next stage we decreased learning rate and set to: <strong>0.001</strong>. The rest of the parameters remained unchanged.</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\loss_2.png" width="500" height="500" style="display: block; margin-left: auto; margin-right: auto;">
+<p>Unfortunately reducing learning rate didn't improve the model :(</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_2_1.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_2_2.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_2_3.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<p>In the last part of the training we unlocked the encoder part of the model. The results present as follows:</p>
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\loss_3.png" width="500" height="500" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_3_1.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_3_2.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<img src="file:////home/wojtek/Documents/uczelnia/image-colorization/pictures\pred_3_3.png"  style="display: block; margin-left: auto; margin-right: auto;">
+<p>We see that the last stage doesn't show much improvement. In fact we see classical example of <strong>overfiting</strong>, because training loss decreases while validation loss doesn't improve.</p>
+<p>The training process can be found in jupiter notebook: train_model.ipynb</p>
+<h2 id="prediction-api">Prediction API</h2>
+<p>We implemented simple REST API configured in the docker environment. The <code>code</code> is in the <code>server</code> folder.</p>
+<h2 id="table-with-completed-requirements">table with completed requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Number of points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Problem colorization</td>
+<td>1</td>
+</tr>
+<tr>
+<td>pre-trained model on the different problem (transfer-learning)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Evaluation on a set with at least 10000 photos</td>
+<td>1</td>
+</tr>
+<tr>
+<td>partialy our own dataset</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Hyperparameter tuning or estimation</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Data augmentation</td>
+<td>1</td>
+</tr>
+<tr>
+<td>docker/ docker compose</td>
+<td>1</td>
+</tr>
+<tr>
+<td>REST API</td>
+<td>1</td>
+</tr>
+<tr>
+<td>DVC</td>
+<td>2</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td>sum:</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+
+            
+            
+        </body>
+        </html>
