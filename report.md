@@ -1,7 +1,9 @@
 # Image colorization
 
-### Github repository
-[Link to repository](https://github.com/shhhQuiettt/image-colorization)
+## Authors
+- [Krzysztof Skrobała](https://github.com/shhhQuiettt)
+- [Wojciech Bogacz](https://github.com/wojbog)
+
 
 ## Problem description
 The image colorization problem is a challenging and fascinating task in computer vision, where the goal is to transform a grayscale image into a fully colored one. This task is particularly challenging because it is an ill-posed problem, as there are many possible colorizations for a single grayscale image. 
