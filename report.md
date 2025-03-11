@@ -79,7 +79,7 @@ The training process can be found in jupiter notebook: train_model.ipynb
 
 We implemented simple REST API configured in the docker environment. The `code` is in the `server` folder.
 
-## table with completed requirements
+## Table with completed requirements
 | Requirement | Number of points |
 | --- | --- |
 | Problem colorization | 1 |
